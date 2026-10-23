@@ -1,6 +1,6 @@
                                                       # Touch — Screenshots
 
-    #This page collects screenshots from the **Touch** Hack The Box machine walkthrough. Add each image to this `screenshots/` folder, then list it below with a                                                          short explanation.
+                            #This page collects screenshots from the **Touch** Hack The Box machine walkthrough. 
 
 
 
