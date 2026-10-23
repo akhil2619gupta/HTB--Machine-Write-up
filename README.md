@@ -6,7 +6,7 @@ A collection of my Hack The Box lab notes and machine walkthroughs, documenting 
 
 | Machine | Platform | Topics |
 |---|---|---|
-| KIOSK-042 | Windows | Enumeration, MySQL, Privilege Escalation |
+| Touch(KIOSK-042) | Windows | Enumeration, MySQL, Privilege Escalation |
 | Machine 02 | Linux | To be added |
 | Machine 03 | Windows | To be added |
 
