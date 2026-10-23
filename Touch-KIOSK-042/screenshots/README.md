@@ -1,15 +1,15 @@
-# Touch — Screenshots
+                                                      # Touch — Screenshots
 
-This page collects screenshots from the **Touch** Hack The Box machine walkthrough. Add each image to this `screenshots/` folder, then list it below with a short explanation.
+    #This page collects screenshots from the **Touch** Hack The Box machine walkthrough. Add each image to this `screenshots/` folder, then list it below with a                                                          short explanation.
 
-> Only upload screenshots from authorized lab activity. Redact passwords, tokens, personal information, and any other sensitive details before committing.
 
-## Screenshot Gallery
 
 ### 1. Machine Overview
-Briefly describe what this screenshot shows.
 
-![Machine overview](machine-overview.png)
+    
+   <img width="1566" height="792" alt="image" src="https://github.com/user-attachments/assets/2845ed67-5cf2-4f15-88f7-aa62134baa51" />
+
+
 
 ### 2. Enumeration
 Briefly describe the ports, services, or findings shown. Remove this section if not applicable.
