@@ -11,3 +11,13 @@
 
 
 
+
+### 2. Nmap Scan
+
+
+
+<img width="1075" height="606" alt="Screenshot 2026-10-25 203508" src="https://github.com/user-attachments/assets/75954625-7bf3-4594-913d-da4c0b3d9464" />
+
+
+
+
