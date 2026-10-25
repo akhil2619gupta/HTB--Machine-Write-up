@@ -68,7 +68,7 @@ Both flags were recovered.
 | MySQL Installation | `C:\MySQL` |
 | Plugin Directory | `C:\MySQL\lib\plugin\` |
 | Service Identity | `LocalSystem` |
-| Final Root-Output File | `C:\Users\KioskUser\Downloads\flag.txt` |
+| Final Root-Output File | `C:\Users\Adminstrator\Desktop\flag.txt` |
 | Final Status | Both flags recovered |
 
 
