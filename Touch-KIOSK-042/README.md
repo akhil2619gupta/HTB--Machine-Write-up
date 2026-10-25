@@ -8,238 +8,117 @@
         
 <img width="1566" height="792"  style="padding-left: 35px;"  alt="image"  src="https://github.com/user-attachments/assets/a911e57f-21bd-4e47-928e-2f6e1966cebb"/>
 
-1. Machine Overview  
 
-Hack The Box identifies Touch as an Easy Windows machine. This document summarizes the recorded investigation of KIOSK-042: reconnaissance, Windows enumeration, MySQL and application-file investigation, and the database-to-operating-system command-execution finding used to retrieve the administrator/root flag.
+The HTB Airways machine was a hands-on Windows penetration-testing exercise focused on application enumeration, MySQL investigation, credential discovery, filesystem permissions, and operating-system command execution through a MySQL User-Defined Function (UDF).
 
-Use these steps only in the authorized HTB lab or another system you own or are permitted to test.
+The assessment began with access to a Windows environment under the KIOSK-042\kioskuser account. Initial enumeration identified the HTB Airways application and its supporting files under C:\ProgramData\HTB Airways and C:\Program Files\HTB Airways\Kiosk.
 
-2. Learning Objectives
+During the investigation, a database maintenance batch file exposed MySQL credentials. This led to further examination of the locally installed MySQL 8.0.42 service, the htb_airways application database, and the server's configuration. The MySQL service was observed listening on 127.0.0.1:3306 and running as LocalSystem.
 
-Nmap host and service enumeration; saving scan output.
+Further investigation identified the MySQL plugin directory as C:\MySQL\lib\plugin\ and revealed the availability of the sys_exec() and sys_eval() functions. These findings were significant because the functions supported operating-system command execution and output retrieval in the lab environment.
 
-Web application inspection and screenshot evidence.
+The investigation also involved troubleshooting file transfers between Kali Linux and Windows, distinguishing MySQL authentication errors from SQL syntax and database-selection errors, and converting hexadecimal output into readable text.
 
-Windows command-line and PowerShell enumeration.
+The final breakthrough came when the MySQL client command explicitly selected the mysql database and invoked sys_exec() to run a Windows command that redirected the contents of the Administrator's root flag file into the kiosk user's Downloads directory. The recovered hexadecimal representation was then converted into readable text.
 
-Users, groups, privileges, services, listeners, and file ACLs.
+Outcome: Both the user and root flags were recovered.
 
-MySQL 8 client basics, authentication errors, configuration, and logs.
+The primary security lesson is that a database service can become a route to operating-system privilege escalation when command-execution functionality is available and operates within a highly privileged service context. The combination of database access, native UDF functionality, service privileges, and filesystem permissions must therefore be assessed as a whole.
 
-Understanding the risk of database functions that can execute OS commands.
+1.1 Key findings
 
-Maintaining a reproducible write-up while redacting credentials and flags.
+The Windows session was associated with KIOSK-042\kioskuser.
 
-3. Lab Details
+The HTB Airways application used a local MySQL database.
+
+A maintenance script exposed MySQL credentials.
+
+The application database was named htb_airways.
+
+The MySQL service listened on 127.0.0.1:3306.
+
+The MySQL service was observed running as LocalSystem.
+
+The configured MySQL plugin directory was C:\MySQL\lib\plugin\.
+
+The sys_exec() and sys_eval() functions were available.
+
+File-transfer troubleshooting exposed errors involving an incorrect IP address, an incorrect HTTP filename, and a reused filename.
+
+The final root-flag retrieval involved sys_exec(), Windows output redirection, and hexadecimal-to-text conversion.
+
+Both flags were recovered.
+1.2  Lab Environment
 
 Item
 
 Recorded value
 
+Target
+
+HTB Airways
+
 Attacker OS
 
 Kali Linux
 
-VPN interface / address
+Target OS
 
-tun0 / 10.10.15.235/23
-
-Target hostname
-
-KIOSK-042
+Windows
 
 Target IP
 
 10.129.137.223
 
-Windows user
+Kali VPN interface
 
-kiosk-042\kioskuser
+tun0
 
-MySQL version
+Kali VPN IP
 
-8.0.42 for Win64
+10.10.15.235
 
-MySQL listeners
+Windows account
 
-127.0.0.1:3306; 0.0.0.0:33060
+KIOSK-042\kioskuser
 
-These addresses and names are from the recorded session and may change after resetting the HTB machine.
+Database version
 
-4. VPN and Nmap
+MySQL 8.0.42, 64-bit
 
-The recorded Kali VPN interface was tun0. Verify the interface and route before starting enumeration:
+MySQL service
 
-ip addr show tun0
-ip route get 10.129.137.223
+MySQL80
 
-Suggested scans for an authorized target (replace the IP if the machine instance changes):
+MySQL port
 
-nmap -Pn -sC -sV -oN nmap-initial.txt 10.129.137.223
-nmap -Pn -p- --min-rate 2000 -oN nmap-all-ports.txt 10.129.137.223
+3306
 
-The original Nmap output was not present in the material used to prepare this document. Add exact open ports, versions, commands, and screenshots from the saved terminal output; do not invent scan results.
+Application database
 
-5. Web Review
+htb_airways
 
-The supplied screenshot identifies the HTB machine as Touch, with Easy difficulty and Windows operating system. During target web enumeration, record the confirmed URL, HTTP/HTTPS, page title, redirects, login forms, errors, exposed paths, and technologies supported by scan results. Only document endpoints that were actually observed.
+MySQL installation
 
-6. Windows Initial Session and Enumeration
+C:\MySQL
 
-Recorded Windows context:
+Plugin directory
 
-whoami
-hostname
-whoami /priv
-whoami /groups
+C:\MySQL\lib\plugin\
 
-Identity: kiosk-042\kioskuser
+Service identity
 
-Hostname: KIOSK-042
+LocalSystem
 
-Working directory: C:\Users\KioskUser\Downloads
+Final root-output file
 
-SeChangeNotifyPrivilege was enabled in the captured output; SeUndockPrivilege, SeIncreaseWorkingSetPrivilege, and SeTimeZonePrivilege were disabled.
+C:\Users\KioskUser\Downloads\flag.txt
 
-Useful commands for collecting additional evidence:
+Final status
 
-Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, OsBuildNumber
-Get-Service | Where-Object {$_.Status -eq "Running"}
-Get-NetTCPConnection -State Listen
-whoami /all
+Both flags recovered
 
-7. MySQL and Application Investigation
 
-Recorded listener information associated PID 3780 with 127.0.0.1:3306 and 0.0.0.0:33060. The MySQL80 service was configured for automatic startup, and the client was C:\MySQL\bin\mysql.exe, version 8.0.42 for Win64.
+1.3 Scope and authorization
 
-netstat -ano | findstr ":3306"
-netstat -ano | findstr ":33060"
-sc.exe qc MySQL80
-
-Application directory:
-
-C:\ProgramData\HTB Airways
-
-File
-
-Recorded detail
-
-Access/result
-
-db-config.ini
-
-286 bytes
-
-Access denied as kioskuser
-
-db-sync-replica.ps1
-
-10,724 bytes
-
-Access denied as kioskuser
-
-refresh-dates.bat
-
-117 bytes
-
-File present
-
-refresh-dates.sql
-
-2,282 bytes
-
-File present
-
-The actual batch filename observed was refresh-dates.bat; refresh.bat was not present. Access denied means the tested account could not read the file through that access path, not that the file was absent.
-
-The MySQL configuration at C:\MySQL\my.ini included basedir=C:/MySQL, datadir=C:/MySQL/data, port=3306, bind-address=127.0.0.1, max_allowed_packet=256M, and innodb_buffer_pool_size=512M.
-
-The error log was C:\MySQL\Data\mysql-error.log. Recorded excerpts mentioned an unknown --install option, a warning involving kiosk_app@localhost, and repeated forced thread closures for kiosk_app. A root login attempt failed with MySQL error 1045 (access denied). These were clues to correlate, not proof that no other account could be used.
-
-8. Privilege Escalation Finding
-
-The recorded solution used MySQL's sys_exec function to execute a Windows command that copied the administrator/root flag into the current user's Downloads directory. This demonstrates how database command-execution functionality can cross the boundary from database access to host-level execution.
-
-SELECT sys_exec('cmd.exe /c type C:\\Users\\Administrator\\Desktop\\root.txt > C:\\Users\\KioskUser\\Downloads\\flag.txt');
-
-The command above is included as a historical lab note. Do not include real passwords in a shared write-up; replace any password with <REDACTED> and keep credentials in private notes.
-
-Security takeaway
-
-Restrict database privileges, disable unnecessary command-execution functions, protect application configuration and scripts, review service-account permissions, and run database services with least privilege.
-
-9. Flags and Evidence
-
-User flag captured: [ ]
-
-Administrator/root flag captured: [ ]
-
-Screenshot evidence saved: [ ]
-
-Sensitive flag values redacted before sharing: [ ]
-
-The exact user-flag acquisition command was not included in the material available for this document. Add it from your original terminal history rather than guessing.
-
-10. Screenshot Checklist
-
-01-machine-page.png — HTB machine page and difficulty
-
-02-vpn-and-route.png — tun0 address and route
-
-03-nmap-initial.png — initial Nmap results
-
-04-nmap-full-ports.png — full-port scan
-
-05-web-enumeration.png — browser findings
-
-06-user-session.png — Windows user and hostname
-
-07-windows-enumeration.png — privileges, services, listeners
-
-08-mysql-enumeration.png — MySQL listener/service
-
-09-application-files.png — file names and permissions
-
-10-mysql-error-log.png — sanitized log clues
-
-11-user-flag-proof.png — user flag proof, value redacted
-
-12-root-flag-proof.png — root flag proof, value redacted
-
-The supplied machine-page image is included in the companion folder as touch-machine-page.png.
-
-11. Lessons Learned
-
-Verify VPN routing before troubleshooting target connectivity.
-
-Save Nmap output and document only confirmed findings.
-
-Use file permissions and access-denied results as enumeration evidence.
-
-Check local-only listeners after gaining a Windows session.
-
-Correlate service configuration, application scripts, accounts, and error logs.
-
-An unsuccessful MySQL root login does not end database enumeration.
-
-Database OS-command execution is a high-impact security boundary.
-
-Redact credentials, flag values, and private lab configuration before publishing.
-
-12. Final Checklist
-
-Add exact Nmap commands and outputs.
-
-Document confirmed web ports and browser findings.
-
-Add the exact user-flag acquisition steps.
-
-Insert sanitized screenshots from each stage.
-
-Redact passwords and flag values.
-
-Verify paths and commands against terminal history.
-
-Keep README.md and the screenshot asset together.
-
-Personal lab documentation prepared from the supplied HTB Touch machine-page screenshot and recorded KIOSK-042 investigation notes.
+This write-up documents activities performed against the authorized HTB Airways lab. The findings should not be interpreted as authorization to test unrelated systems. Database functions capable of executing operating-system commands can have significant security implications and should be assessed only within an approved scope.
