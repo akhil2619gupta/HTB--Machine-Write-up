@@ -50,26 +50,23 @@ The final root-flag retrieval involved sys_exec(), Windows output redirection, a
 Both flags were recovered.
 1.2  Lab Environment
 
-+-------------------------+-----------------------------------------------+
-| Item                    | Recorded Value                                |
-+-------------------------+-----------------------------------------------+
-| Target                  | HTB Airways                                   |
-| Attacker OS             | Kali Linux                                    |
-| Target OS               | Windows                                       |
-| Target IP               | 10.129.137.223                                 |
-| Kali VPN Interface      | tun0                                          |
-| Kali VPN IP             | 10.10.15.235                                   |
-| Windows Account        | KIOSK-042\kioskuser                            |
-| Database Version        | MySQL 8.0.42, 64-bit                           |
-| MySQL Service           | MySQL80                                       |
-| MySQL Port              | 3306                                          |
-| Application Database    | htb_airways                                   |
-| MySQL Installation      | C:\MySQL                                      |
-| Plugin Directory        | C:\MySQL\lib\plugin\                          |
-| Service Identity        | LocalSystem                                   |
-| Final Root-Output File  | C:\Users\KioskUser\Downloads\flag.txt         |
-| Final Status             | Both flags recovered                          |
-+-------------------------+-----------------------------------------------+
+Item	Recorded Value
+Target	HTB Airways
+Attacker OS	Kali Linux
+Target OS	Windows
+Target IP	10.129.137.223
+Kali VPN Interface	tun0
+Kali VPN IP	10.10.15.235
+Windows Account	KIOSK-042\kioskuser
+Database Version	MySQL 8.0.42, 64-bit
+MySQL Service	MySQL80
+MySQL Port	3306
+Application Database	htb_airways
+MySQL Installation	C:\MySQL
+Plugin Directory	C:\MySQL\lib\plugin\
+Service Identity	LocalSystem
+Final Root-Output File	C:\Users\KioskUser\Downloads\flag.txt
+Final Status	Both flags recovered
 
 1.3 Scope and authorization
 
