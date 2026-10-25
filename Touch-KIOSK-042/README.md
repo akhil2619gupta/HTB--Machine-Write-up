@@ -4,9 +4,10 @@
 
                                   Machine notes, enumeration record, and solution summary
                   
+        <img width="1566" height="792" alt="image" src="https://github.com/user-attachments/assets/a911e57f-21bd-4e47-928e-2f6e1966cebb" />
 
 
-1. Machine Overview
+1. Machine Overview  
 
 Hack The Box identifies Touch as an Easy Windows machine. This document summarizes the recorded investigation of KIOSK-042: reconnaissance, Windows enumeration, MySQL and application-file investigation, and the database-to-operating-system command-execution finding used to retrieve the administrator/root flag.
 
