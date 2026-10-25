@@ -57,9 +57,10 @@ Both flags were recovered.
 | Target | HTB Airways |
 | Attacker OS | Kali Linux |
 | Target OS | Windows |
-| Target IP | `10.129.137.223` |
+| Target IP | `10.129.xxx.223` |
 | Kali VPN Interface | `tun0` |
-| Kali VPN IP | `10.10.15.235` |
+| Kali VPN IP | `10.xx.xx.235` |
+| Nexion Device(Webs pass) | NX-DH-2024-B7042 |
 | Windows Account | `KIOSK-042\kioskuser` |
 | Database Version | MySQL 8.0.42, 64-bit |
 | MySQL Service | `MySQL80` |
