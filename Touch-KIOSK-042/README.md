@@ -25,7 +25,7 @@ Outcome: Both the user and root flags were recovered.
 
 The primary security lesson is that a database service can become a route to operating-system privilege escalation when command-execution functionality is available and operates within a highly privileged service context. The combination of database access, native UDF functionality, service privileges, and filesystem permissions must therefore be assessed as a whole.
 
-1.1 Key findings
+##1.1 Key findings
 
 The Windows session was associated with KIOSK-042\kioskuser.
 
@@ -48,26 +48,30 @@ File-transfer troubleshooting exposed errors involving an incorrect IP address, 
 The final root-flag retrieval involved sys_exec(), Windows output redirection, and hexadecimal-to-text conversion.
 
 Both flags were recovered.
-1.2  Lab Environment
 
-Item	Recorded Value
-Target	HTB Airways
-Attacker OS	Kali Linux
-Target OS	Windows
-Target IP	10.129.137.223
-Kali VPN Interface	tun0
-Kali VPN IP	10.10.15.235
-Windows Account	KIOSK-042\kioskuser
-Database Version	MySQL 8.0.42, 64-bit
-MySQL Service	MySQL80
-MySQL Port	3306
-Application Database	htb_airways
-MySQL Installation	C:\MySQL
-Plugin Directory	C:\MySQL\lib\plugin\
-Service Identity	LocalSystem
-Final Root-Output File	C:\Users\KioskUser\Downloads\flag.txt
-Final Status	Both flags recovered
 
-1.3 Scope and authorization
+### 1.2 Lab Environment
+
+| Item | Recorded Value |
+| --- | --- |
+| Target | HTB Airways |
+| Attacker OS | Kali Linux |
+| Target OS | Windows |
+| Target IP | `10.129.137.223` |
+| Kali VPN Interface | `tun0` |
+| Kali VPN IP | `10.10.15.235` |
+| Windows Account | `KIOSK-042\kioskuser` |
+| Database Version | MySQL 8.0.42, 64-bit |
+| MySQL Service | `MySQL80` |
+| MySQL Port | `3306` |
+| Application Database | `htb_airways` |
+| MySQL Installation | `C:\MySQL` |
+| Plugin Directory | `C:\MySQL\lib\plugin\` |
+| Service Identity | `LocalSystem` |
+| Final Root-Output File | `C:\Users\KioskUser\Downloads\flag.txt` |
+| Final Status | Both flags recovered |
+
+
+##1.3 Scope and authorization
 
 This write-up documents activities performed against the authorized HTB Airways lab. The findings should not be interpreted as authorization to test unrelated systems. Database functions capable of executing operating-system commands can have significant security implications and should be assessed only within an approved scope.
