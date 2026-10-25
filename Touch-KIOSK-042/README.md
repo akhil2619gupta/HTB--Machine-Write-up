@@ -60,7 +60,7 @@ Both flags were recovered.
 | Target IP | `10.129.xxx.223` |
 | Kali VPN Interface | `tun0` |
 | Kali VPN IP | `10.xx.xx.235` |
-| Nexion Device(Webs pass) | NX-DH-2024-B7042 |
+| Nexion Device(Webs pass) | `NX-DH-2024-B7042` |
 | Windows Account | `KIOSK-042\kioskuser` |
 | Database Version | MySQL 8.0.42, 64-bit |
 | MySQL Service | `MySQL80` |
